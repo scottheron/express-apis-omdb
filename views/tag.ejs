@@ -12,6 +12,6 @@
 
 <% tag.forEach(function(tag){ %>
     <ul>
-    	<a href='/favoritesbytag'> <%= tag.tag %> </a>
+    	<a href='/favorites/<%= tag.favoriteId %>/tags'> <%= tag.name %> </a>
     </ul>
 <% }) %>

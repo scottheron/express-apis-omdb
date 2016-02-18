@@ -34,8 +34,8 @@ router.get("/:id/comments", function(req, res){
 
 router.post('/:id/comments', function(req, res) {
   	db.comment.create({
-    	content: req.body.content,
-    	author: req.body.author,
+    	body: req.body.content,
+    	title: req.body.author,
     	favoriteId: req.params.id
   	}).then(function() {
     	res.redirect('/favorites/' + req.params.id + '/comments');
@@ -66,18 +66,12 @@ router.get('/:id/tags', function(req,res) {
 router.post('/:id/tags', function(req,res) {
     db.tag.findOrCreate({
         where: { 
-            tag: req.body.tag
+            name: req.body.tag,
+            favoriteId: req.params.id
         }
     }).spread(function(tag) {
-        db.favoritesTags.findOrCreate( {
-            where: {
-                tagId: tag.id,
-                favoriteId: req.body.id
-            }
-        }).spread(function(join) {
-            res.send(join)
-        })
-        });
+        res.redirect('/favorites')
+    });
 });
 
 

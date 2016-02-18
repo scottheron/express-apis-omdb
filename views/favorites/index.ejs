@@ -25,9 +25,10 @@
                 <%= movie.imdbId %>
             </p>
             <button  class="btn red lighten-1">Comment</button>
-           
+
         </div>
-    </form method="POST" action="/:id/tags">
+    </form>
+    <form method="POST" action="/favorites/<%= movie.id %>/tags">
       <input placeholder="add tag" type='text' name='tag'>
       <input type="hidden" value="<%= movie.id %>" name="id">
       <input type="submit">
