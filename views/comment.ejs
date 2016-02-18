@@ -9,7 +9,9 @@
     </div>
 </nav>
 
-<h1><%= favorite.title %></h1>
+<h1><%= favorite.title %></h1><p>tags - </p><p><% favorite.tags.forEach(function(tag){ %>
+                                                 <%= tag.name %>, 
+                                               <% }); %></p>
 
 <form method="POST">
   <div class="form-group">

@@ -11,9 +11,6 @@ module.exports = {
       name: {
         type: Sequelize.TEXT
       },
-      favoriteId: {
-        type: Sequelize.INTEGER
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

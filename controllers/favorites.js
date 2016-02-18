@@ -13,10 +13,12 @@ router.use(bodyParser.urlencoded({extended: false}));
 router.get("/", function(req, res){
 	//res.send(process.env.MY_SECRET_KEY);
 	db.favorite.findAll({
-		}).then(function(fav){
-			res.render("favorites/index.ejs", {
-				fav: fav
-			});
+    include: [db.comment, db.tag]
+  })
+        .then(function(fav){
+			    res.render("favorites/index.ejs", {
+				  fav: fav,
+        });
 		});
 	}
 );
@@ -25,10 +27,9 @@ router.get("/:id/comments", function(req, res){
 	var favoriteId = req.params.id;
 	db.favorite.find({
     	where: {id: favoriteId},
-    	include: [db.comment]
+    	include: [db.comment, db.tag]
   	}).then(function(fav) {
-    // res.send(fav);
-    res.render('comment.ejs', {favorite: fav});
+      res.render('comment.ejs', {favorite: fav});
   	});
 });
 
@@ -56,28 +57,33 @@ router.post("/", function(req, res){
 	
 });
 
-router.get('/:id/tags', function(req,res) {
-    db.tag.findAll().then(function(tag) {
-        res.render('tags.ejs', {tag: tag})
-    })
-})
-
+// router.get('/:id/tags', function(req,res) {
+//     db.tag.findAll().then(function(tag) {
+//         res.render('tags.ejs', {tag: tag})
+//     })
+// })
 
 router.post('/:id/tags', function(req,res) {
     db.tag.findOrCreate({
         where: { 
-            name: req.body.tag,
-            favoriteId: req.params.id
+            name: req.body.tag
         }
     }).spread(function(tag) {
-        res.redirect('/favorites')
-    });
+        var favid = req.params.id;
+        db.favorite.find({where:{
+          id: favid
+        }}).then(function(fav){
+          if(fav){
+            fav.addTag(tag);
+            res.redirect('/favorites');
+          } else {
+            res.send("nope");
+          }
+        }
+      );
+    }
+  );
 });
-
-
-
-
-
 
 module.exports = router;
 

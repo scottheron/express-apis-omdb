@@ -24,6 +24,9 @@
             <p>
                 <%= movie.imdbId %>
             </p>
+            <p>tags - </p><p><% movie.tags.forEach(function(tags){ %>
+                               <%= tags.name %>, 
+                          <% }); %></p>           
             <button  class="btn red lighten-1">Comment</button>
 
         </div>
