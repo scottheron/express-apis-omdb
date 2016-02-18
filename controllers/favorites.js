@@ -1,24 +1,24 @@
 var express = require("express");
 var app = express();
-var ejsLayouts = require("express-ejs-layouts");
 var request = require("request");
 var bodyParser = require('body-parser');
 var db = require('../models');
 var router = express.Router();
 
-router.use(ejsLayouts);
 router.use(bodyParser.urlencoded({extended: false}));
 
+/*
 
+*/
 router.get("/", function(req, res){
 	//res.send(process.env.MY_SECRET_KEY);
 	db.favorite.findAll({
     include: [db.comment, db.tag]
   })
-        .then(function(fav){
-			    res.render("favorites/index.ejs", {
-				  fav: fav,
-        });
+      .then(function(fav){
+		    res.render("favorites/index.ejs", {
+			  fav: fav,
+      });
 		});
 	}
 );
@@ -68,11 +68,14 @@ router.post('/:id/tags', function(req,res) {
         where: { 
             name: req.body.tag
         }
-    }).spread(function(tag) {
+    })
+    .spread(function(tag) {
         var favid = req.params.id;
-        db.favorite.find({where:{
-          id: favid
-        }}).then(function(fav){
+        db.favorite.find({
+          where:{
+            id: favid
+        }})
+        .then(function(fav){
           if(fav){
             fav.addTag(tag);
             res.redirect('/favorites');
